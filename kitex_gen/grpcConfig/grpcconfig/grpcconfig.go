@@ -5,10 +5,10 @@ package grpcconfig
 import (
 	"context"
 	"fmt"
-	"gconfig-client/kitex_gen/grpcConfig"
 	"github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 	"github.com/cloudwego/kitex/pkg/streaming"
+	"github.com/ldongpo/gconfig-client/kitex_gen/grpcConfig"
 	"google.golang.org/protobuf/proto"
 )
 

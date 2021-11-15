@@ -4,9 +4,9 @@ package grpcconfig
 
 import (
 	"context"
-	"gconfig-client/kitex_gen/grpcConfig"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
+	"github.com/ldongpo/gconfig-client/kitex_gen/grpcConfig"
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.

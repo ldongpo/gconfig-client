@@ -2,8 +2,8 @@
 package grpcconfig
 
 import (
-	"gconfig-client/kitex_gen/grpcConfig"
 	"github.com/cloudwego/kitex/server"
+	"github.com/ldongpo/gconfig-client/kitex_gen/grpcConfig"
 )
 
 // NewServer creates a server.Server with the given handler and options.
