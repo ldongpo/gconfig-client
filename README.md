@@ -11,7 +11,7 @@
 
 用于配置中心服务端微服务地址
 
-`export GO_GRPC_SERVER_HOST="127.0.0.1:9099"`
+`export GO_GRPC_CONFIG_SERVER_HOST="127.0.0.1:9099"`
 
 服务端代码（暂未上传）
 

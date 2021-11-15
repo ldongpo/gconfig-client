@@ -20,7 +20,7 @@ const (
 	Ext        = "yaml"        //生成配置文件的后缀
 	path       = "HOME"        //生成配置文件的根目录
 	pathDir    = "go-grpc-config"
-	ServerHost = "GO_GRPC_SERVER_HOST"
+	ServerHost = "GO_GRPC_CONFIG_SERVER_HOST"
 	syncPeriod = 30
 )
 
