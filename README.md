@@ -21,26 +21,27 @@
 package main
 
 import (
-   "fmt"
-   gConfig "github.com/ldongpo/gconfig-client"
+	"fmt"
+	gConfig "github.com/ldongpo/gconfig-client"
 )
 
-func main()  {
-   var config gConfig.GRcpConfig
-   config = gConfig.GRcpConfig{
-    Env:       "test",  //环境
+func main() {
+	var config gConfig.GRcpConfig
+	config = gConfig.GRcpConfig{
+		Env:       "test",  //环境
 		Namespace: "semir", //命名空间
 		Project:   "ts",    //项目
 		Version:   "v1.0",  //版本
-   }
-   c,err := config.GetClient()
-   if err != nil{
-      fmt.Println(err)
-      return
-   }
-   val :=c.Get("redis.host")
-   fmt.Println(val)
+	}
+	c, err := config.GetClient()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	val := c.Get("redis.host")
+	fmt.Println(val)
 }
+
 ```
 
 
