@@ -1,4 +1,4 @@
-module gconfig-client
+module github.com/ldongpo/gconfig-client
 
 go 1.16
 
