@@ -17,7 +17,7 @@ import (
 
 const (
 	FN         = "application" //生成配置文件的名称
-	Ext        = "yaml"        //生成配置文件的后缀
+	Ext        = "json"        //生成配置文件的后缀
 	path       = "HOME"        //生成配置文件的根目录
 	pathDir    = "go-grpc-config"
 	ServerHost = "GO_GRPC_CONFIG_SERVER_HOST"
