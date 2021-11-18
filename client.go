@@ -51,7 +51,7 @@ func new() (*GRcpConfig, error) {
 
 // PutConfig
 // @Author liangdongpo
-// @Description 设置缓存
+// @Description 设置缓存,按默认参数
 // @Date 12:33 下午 2021/11/18
 // @Param
 // @return
@@ -73,9 +73,33 @@ func (g *GRcpConfig) PutConfig(data string) error {
 	return nil
 }
 
+// PutConfigParam
+// @Author liangdongpo
+// @Description 设置缓存,按传来的参数
+// @Date 2:23 下午 2021/11/18
+// @Param
+// @return
+func (g *GRcpConfig) PutConfigParam(env string, namespace string, project string, version string, data string) error {
+	req := grpcConfig.PutRequest{
+		Env:       env,
+		Namespace: namespace,
+		Project:   project,
+		Version:   version,
+		Data:      data,
+	}
+	res, err := I.client.Put(context.Background(), &req)
+	if err != nil {
+		return err
+	}
+	if res.Code != 0 {
+		return errors.New(res.Msg)
+	}
+	return nil
+}
+
 // DelConfig
 // @Author liangdongpo
-// @Description 删除缓存**慎用，会把此环境、命名空间、项目、版本条件的缓存都删除
+// @Description 删除缓存**慎用，安排默认参数，会把此环境、命名空间、项目、版本条件的缓存都删除
 // @Date 12:35 下午 2021/11/18
 // @Param
 // @return
@@ -96,9 +120,32 @@ func (g *GRcpConfig) DelConfig() error {
 	return nil
 }
 
+// DelConfigParam
+// @Author liangdongpo
+// @Description 删除缓存，按传来的参数
+// @Date 2:24 下午 2021/11/18
+// @Param
+// @return
+func (g *GRcpConfig) DelConfigParam(env string, namespace string, project string, version string) error {
+	req := grpcConfig.DelRequest{
+		Env:       env,
+		Namespace: namespace,
+		Project:   project,
+		Version:   version,
+	}
+	res, err := I.client.Del(context.Background(), &req)
+	if err != nil {
+		return err
+	}
+	if res.Code != 0 {
+		return errors.New(res.Msg)
+	}
+	return nil
+}
+
 // GetAll
 // @Author liangdongpo
-// @Description 获取所有配置：string 类型
+// @Description 获取所有配置，按默认的参数：string 类型
 // @Date 12:45 下午 2021/11/18
 // @Param
 // @return
@@ -143,18 +190,33 @@ func (g *GRcpConfig) GetAllParam(env string, namespace string, project string, v
 		return "", errors.New(res.Msg)
 	}
 }
+
+// Get
+// @Author liangdongpo
+// @Description 获取某个缓存，只支持默认参数下
+// @Date 2:25 下午 2021/11/18
+// @Param
+// @return
 func (g *GRcpConfig) Get(key string) interface{} {
 	return g.v.Get(key)
 }
 
+// GetString
+// @Author liangdongpo
+// @Description 获取string类型的缓存，只支持默认参数下
+// @Date 2:30 下午 2021/11/18
+// @Param
+// @return
 func (g *GRcpConfig) GetString(key string) string {
 	return g.v.GetString(key)
 }
 
+// GetBool 获取bool 类型 支持默认参数
 func (g *GRcpConfig) GetBool(key string) bool {
 	return g.v.GetBool(key)
 }
 
+// GetInt 获取int 类型 支持默认参数
 func (g *GRcpConfig) GetInt(key string) int {
 	return g.v.GetInt(key)
 }
