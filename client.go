@@ -1,7 +1,10 @@
 package GRcpConfig
 
 import (
+	"context"
+	"errors"
 	"github.com/fsnotify/fsnotify"
+	"github.com/ldongpo/gconfig-client/kitex_gen/grpcConfig"
 	"github.com/spf13/viper"
 	"log"
 	"time"
@@ -44,6 +47,53 @@ func new() (*GRcpConfig, error) {
 		log.Printf("Config file change: %s op: %d\n", in.Name, in.Op)
 	})
 	return &GRcpConfig{v: v}, nil
+}
+
+// PutConfig
+// @Author liangdongpo
+// @Description 设置缓存
+// @Date 12:33 下午 2021/11/18
+// @Param
+// @return
+func (g *GRcpConfig) PutConfig(data string) error {
+	req := grpcConfig.PutRequest{
+		Env:       I.env,
+		Namespace: I.namespace,
+		Project:   I.project,
+		Version:   I.version,
+		Data:      data,
+	}
+	res, err := I.client.Put(context.Background(), &req)
+	if err != nil {
+		return err
+	}
+	if res.Code != 0 {
+		return errors.New(res.Msg)
+	}
+	return nil
+}
+
+// DelConfig
+// @Author liangdongpo
+// @Description 删除缓存**慎用，会把此环境、命名空间、项目、版本条件的缓存都删除
+// @Date 12:35 下午 2021/11/18
+// @Param
+// @return
+func (g *GRcpConfig) DelConfig() error {
+	req := grpcConfig.DelRequest{
+		Env:       I.env,
+		Namespace: I.namespace,
+		Project:   I.project,
+		Version:   I.version,
+	}
+	res, err := I.client.Del(context.Background(), &req)
+	if err != nil {
+		return err
+	}
+	if res.Code != 0 {
+		return errors.New(res.Msg)
+	}
+	return nil
 }
 func (g *GRcpConfig) Get(key string) interface{} {
 	return g.v.Get(key)

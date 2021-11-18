@@ -13,6 +13,7 @@ import (
 type Client interface {
 	Get(ctx context.Context, Req *grpcConfig.Request, callOptions ...callopt.Option) (r *grpcConfig.Response, err error)
 	Put(ctx context.Context, Req *grpcConfig.PutRequest, callOptions ...callopt.Option) (r *grpcConfig.PutResponse, err error)
+	Del(ctx context.Context, Req *grpcConfig.DelRequest, callOptions ...callopt.Option) (r *grpcConfig.DelResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -52,4 +53,9 @@ func (p *kGrpcConfigClient) Get(ctx context.Context, Req *grpcConfig.Request, ca
 func (p *kGrpcConfigClient) Put(ctx context.Context, Req *grpcConfig.PutRequest, callOptions ...callopt.Option) (r *grpcConfig.PutResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.Put(ctx, Req)
+}
+
+func (p *kGrpcConfigClient) Del(ctx context.Context, Req *grpcConfig.DelRequest, callOptions ...callopt.Option) (r *grpcConfig.DelResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.Del(ctx, Req)
 }

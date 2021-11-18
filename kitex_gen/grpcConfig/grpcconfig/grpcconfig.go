@@ -24,6 +24,7 @@ func newServiceInfo() *kitex.ServiceInfo {
 	methods := map[string]kitex.MethodInfo{
 		"Get": kitex.NewMethodInfo(getHandler, newGetArgs, newGetResult, false),
 		"Put": kitex.NewMethodInfo(putHandler, newPutArgs, newPutResult, false),
+		"Del": kitex.NewMethodInfo(delHandler, newDelArgs, newDelResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "grpcConfig",
@@ -245,6 +246,109 @@ func (p *PutResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
+func delHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(grpcConfig.DelRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(grpcConfig.GrpcConfig).Del(ctx, req)
+		if err != nil {
+			return err
+		}
+		if err := st.SendMsg(resp); err != nil {
+			return err
+		}
+	case *DelArgs:
+		success, err := handler.(grpcConfig.GrpcConfig).Del(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*DelResult)
+		realResult.Success = success
+	}
+	return nil
+}
+func newDelArgs() interface{} {
+	return &DelArgs{}
+}
+
+func newDelResult() interface{} {
+	return &DelResult{}
+}
+
+type DelArgs struct {
+	Req *grpcConfig.DelRequest
+}
+
+func (p *DelArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, fmt.Errorf("No req in DelArgs")
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *DelArgs) Unmarshal(in []byte) error {
+	msg := new(grpcConfig.DelRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var DelArgs_Req_DEFAULT *grpcConfig.DelRequest
+
+func (p *DelArgs) GetReq() *grpcConfig.DelRequest {
+	if !p.IsSetReq() {
+		return DelArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *DelArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+type DelResult struct {
+	Success *grpcConfig.DelResponse
+}
+
+var DelResult_Success_DEFAULT *grpcConfig.DelResponse
+
+func (p *DelResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, fmt.Errorf("No req in DelResult")
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *DelResult) Unmarshal(in []byte) error {
+	msg := new(grpcConfig.DelResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *DelResult) GetSuccess() *grpcConfig.DelResponse {
+	if !p.IsSetSuccess() {
+		return DelResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *DelResult) SetSuccess(x interface{}) {
+	p.Success = x.(*grpcConfig.DelResponse)
+}
+
+func (p *DelResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -270,6 +374,16 @@ func (p *kClient) Put(ctx context.Context, Req *grpcConfig.PutRequest) (r *grpcC
 	_args.Req = Req
 	var _result PutResult
 	if err = p.c.Call(ctx, "Put", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) Del(ctx context.Context, Req *grpcConfig.DelRequest) (r *grpcConfig.DelResponse, err error) {
+	var _args DelArgs
+	_args.Req = Req
+	var _result DelResult
+	if err = p.c.Call(ctx, "Del", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
