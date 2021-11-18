@@ -96,13 +96,13 @@ func (g *GRcpConfig) DelConfig() error {
 	return nil
 }
 
-// GelAll
+// GetAll
 // @Author liangdongpo
 // @Description 获取所有配置：string 类型
 // @Date 12:45 下午 2021/11/18
 // @Param
 // @return
-func (g *GRcpConfig) GelAll() (string, error) {
+func (g *GRcpConfig) GetAll() (string, error) {
 	req := grpcConfig.Request{
 		Env:       I.env,
 		Namespace: I.namespace,
