@@ -95,6 +95,30 @@ func (g *GRcpConfig) DelConfig() error {
 	}
 	return nil
 }
+
+// GelAll
+// @Author liangdongpo
+// @Description 获取所有配置：string 类型
+// @Date 12:45 下午 2021/11/18
+// @Param
+// @return
+func (g *GRcpConfig) GelAll() (string, error) {
+	req := grpcConfig.Request{
+		Env:       I.env,
+		Namespace: I.namespace,
+		Project:   I.project,
+		Version:   I.version,
+	}
+	res, err := I.client.Get(context.Background(), &req)
+	if err != nil {
+		return "", err
+	}
+	if res.Code == 0 {
+		return res.Data, nil
+	} else {
+		return "", errors.New(res.Msg)
+	}
+}
 func (g *GRcpConfig) Get(key string) interface{} {
 	return g.v.Get(key)
 }
