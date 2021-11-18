@@ -11,7 +11,28 @@
 
 用于配置中心服务端微服务地址
 
-`export GO_GRPC_CONFIG_SERVER_HOST="127.0.0.1:9099"`
+```shell
+export GO_GRPC_CONFIG_SERVER_HOST="127.0.0.1:9090"
+
+```
+
+添加环境变量：
+
+- GO_GRPC_CONFIG_ENV：环境
+- GO_GRPC_CONFIG_NAMESPACE：命名空间
+- GO_GRPC_CONFIG_PROJECT：项目
+- GO_GRPC_CONFIG_VERSION：版本
+
+```sh
+export GO_GRPC_CONFIG_ENV=PROD
+export GO_GRPC_CONFIG_NAMESPACE="ecsemir"
+export GO_GRPC_CONFIG_PROJECT="天枢"
+export GO_GRPC_CONFIG_VERSION="v1.0.1"
+```
+
+
+
+
 
 服务端代码（暂未上传）
 
@@ -22,24 +43,12 @@ package main
 
 import (
 	"fmt"
-	gConfig "github.com/ldongpo/gconfig-client"
+	"github.com/ldongpo/gconfig-client"
 )
 
 func main() {
-	var config gConfig.GRcpConfig
-	config = gConfig.GRcpConfig{
-		Env:       "test",  //环境
-		Namespace: "semir", //命名空间
-		Project:   "ts",    //项目
-		Version:   "v1.0",  //版本
-	}
-	c, err := config.GetClient()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	val := c.Get("redis.host")
-	fmt.Println(val)
+	val := GRcpConfig.C.Get("redis.db")
+	fmt.Println("db:",val)
 }
 
 ```

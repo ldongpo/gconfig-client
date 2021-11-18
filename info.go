@@ -1,4 +1,4 @@
-package gconfig_client
+package GRcpConfig
 
 import (
 	"context"
@@ -20,7 +20,11 @@ const (
 	Ext        = "json"        //生成配置文件的后缀
 	path       = "HOME"        //生成配置文件的根目录
 	pathDir    = "go-grpc-config"
-	ServerHost = "GO_GRPC_CONFIG_SERVER_HOST"
+	ServerHost = "GO_GRPC_CONFIG_SERVER_HOST" //服务端地址
+	ENV        = "GO_GRPC_CONFIG_ENV"         //环境
+	NAMESPACE  = "GO_GRPC_CONFIG_NAMESPACE"   //命名空间
+	PROJECT    = "GO_GRPC_CONFIG_PROJECT"     //项目
+	VERSION    = "GO_GRPC_CONFIG_VERSION"     //版本
 	syncPeriod = 30
 )
 
@@ -29,16 +33,16 @@ var (
 	once = &sync.Once{}
 )
 
-func startInfo(g *GRcpConfig) {
-	once.Do(func() { initInfo(g) })
+func startInfo() {
+	once.Do(initInfo)
 }
 
-func initInfo(g *GRcpConfig) {
+func initInfo() {
 	if I != nil {
 		return
 	}
 	var err error
-	I, err = createInfo(g)
+	I, err = createInfo()
 	if err != nil {
 		log.Fatalf("Fatal error GRcpConfig newInfo : %v\n", err)
 	}
@@ -56,12 +60,24 @@ func initInfo(g *GRcpConfig) {
 	}()
 }
 
-func createInfo(g *GRcpConfig) (*info, error) {
+func createInfo() (*info, error) {
 	inf := &info{}
-	inf.env = g.Env
-	inf.namespace = g.Namespace
-	inf.project = g.Project
-	inf.version = g.Version
+	if os.Getenv(ENV) == "" {
+		return nil, errors.New("env cannot be empty")
+	}
+	if os.Getenv(NAMESPACE) == "" {
+		return nil, errors.New("namespace cannot be empty")
+	}
+	if os.Getenv(PROJECT) == "" {
+		return nil, errors.New("project cannot be empty")
+	}
+	if os.Getenv(VERSION) == "" {
+		return nil, errors.New("version cannot be empty")
+	}
+	inf.env = os.Getenv(ENV)
+	inf.namespace = os.Getenv(NAMESPACE)
+	inf.project = os.Getenv(PROJECT)
+	inf.version = os.Getenv(VERSION)
 	if os.Getenv(ServerHost) == "" {
 		return nil, errors.New("server host cannot be empty")
 	}

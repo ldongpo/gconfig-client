@@ -1,4 +1,4 @@
-package gconfig_client
+package GRcpConfig
 
 import (
 	"github.com/fsnotify/fsnotify"
@@ -12,16 +12,16 @@ var (
 )
 
 type GRcpConfig struct {
-	Env       string //环境
-	Namespace string //命名空间
-	Project   string //项目
-	Version   string //版本
-	v         *viper.Viper
+	v *viper.Viper
 }
 
-func (g *GRcpConfig) GetClient() (*GRcpConfig, error) {
-	startInfo(g)
-	return new()
+func init() {
+	startInfo()
+	var err error
+	C, err = new()
+	if err != nil {
+		log.Fatalf("Fatal error configurator init: %v\n", err)
+	}
 }
 
 // new
