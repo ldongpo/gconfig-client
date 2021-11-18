@@ -119,6 +119,30 @@ func (g *GRcpConfig) GetAll() (string, error) {
 		return "", errors.New(res.Msg)
 	}
 }
+
+// GetAllParam
+// @Author liangdongpo
+// @Description 自定义参数获取全部配置
+// @Date 1:38 下午 2021/11/18
+// @Param
+// @return
+func (g *GRcpConfig) GetAllParam(env string, namespace string, project string, version string) (string, error) {
+	req := grpcConfig.Request{
+		Env:       env,
+		Namespace: namespace,
+		Project:   project,
+		Version:   version,
+	}
+	res, err := I.client.Get(context.Background(), &req)
+	if err != nil {
+		return "", err
+	}
+	if res.Code == 0 {
+		return res.Data, nil
+	} else {
+		return "", errors.New(res.Msg)
+	}
+}
 func (g *GRcpConfig) Get(key string) interface{} {
 	return g.v.Get(key)
 }
