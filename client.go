@@ -7,11 +7,13 @@ import (
 	"github.com/ldongpo/gconfig-client/kitex_gen/grpcConfig"
 	"github.com/spf13/viper"
 	"log"
+	"sync"
 	"time"
 )
 
 var (
-	C *GRcpConfig
+	C       *GRcpConfig
+	onceCon = &sync.Once{}
 )
 
 type GRcpConfig struct {
@@ -20,11 +22,7 @@ type GRcpConfig struct {
 
 func init() {
 	startInfo()
-	var err error
-	C, err = new()
-	if err != nil {
-		log.Fatalf("Fatal error configurator init: %v\n", err)
-	}
+	onceCon.Do(new)
 }
 
 // new
@@ -33,20 +31,25 @@ func init() {
 // @Date 10:34 下午 2021/11/14
 // @Param
 // @return
-func new() (*GRcpConfig, error) {
+func new() {
 	v := viper.New()
 	v.SetConfigName(FN)
 	v.SetConfigType(Ext)
 	v.AddConfigPath(I.Path)
 	err := v.ReadInConfig()
 	if err != nil {
-		return nil, err
+		log.Printf(err.Error())
+		return
 	}
 	v.WatchConfig()
 	v.OnConfigChange(func(in fsnotify.Event) {
 		log.Printf("Config file change: %s op: %d\n", in.Name, in.Op)
 	})
-	return &GRcpConfig{v: v}, nil
+	C = &GRcpConfig{v: v}
+}
+
+func OnConfigChange() {
+
 }
 
 // PutConfig
