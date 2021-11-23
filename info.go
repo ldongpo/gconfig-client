@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/cloudwego/kitex/client"
+	"github.com/cloudwego/kitex/transport"
 	"github.com/ldongpo/gconfig-client/kitex_gen/grpcConfig"
 	"github.com/ldongpo/gconfig-client/kitex_gen/grpcConfig/grpcconfig"
 	"io/ioutil"
@@ -86,7 +87,11 @@ func createInfo() (*info, error) {
 	if err != nil {
 		return inf, err
 	}
-	inf.client, err = grpcconfig.NewClient("grcpConfig", client.WithHostPorts(os.Getenv(ServerHost)))
+	rpcTimeout := client.WithRPCTimeout(5 * time.Second)
+	connTimeout := client.WithConnectTimeout(500 * time.Millisecond)
+	transport := client.WithTransportProtocol(transport.GRPC)
+	host := client.WithHostPorts(os.Getenv(ServerHost))
+	inf.client, err = grpcconfig.NewClient("grcpConfig", rpcTimeout, connTimeout, transport, host)
 	return inf, err
 }
 
