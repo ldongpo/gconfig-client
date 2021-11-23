@@ -43,7 +43,9 @@ func new() {
 	}
 	v.WatchConfig()
 	v.OnConfigChange(func(in fsnotify.Event) {
-		log.Printf("Config file change: %s op: %d\n", in.Name, in.Op)
+		if I.ShowChangeLog != "hidden" {
+			log.Printf("Config file change: %s op: %d\n", in.Name, in.Op)
+		}
 	})
 	C = &GRcpConfig{v: v}
 }

@@ -30,9 +30,13 @@ export GO_GRPC_CONFIG_PROJECT="天枢"
 export GO_GRPC_CONFIG_VERSION="v1.0.1"
 ```
 
+其他配置：
 
+- GO_GRPC_CONFIG_SHOW_CHANGE_LOG 是否显示配置文件更新提示 hidden：不显示，其他值显示
 
-
+```shell
+export GO_GRPC_CONFIG_SHOW_CHANGE_LOG="hidden"
+```
 
 服务端代码（暂未上传）
 

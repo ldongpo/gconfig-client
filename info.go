@@ -17,16 +17,17 @@ import (
 )
 
 const (
-	FN         = "application" //生成配置文件的名称
-	Ext        = "json"        //生成配置文件的后缀
-	path       = "HOME"        //生成配置文件的根目录
-	pathDir    = "go-grpc-config"
-	ServerHost = "GO_GRPC_CONFIG_SERVER_HOST" //服务端地址
-	ENV        = "GO_GRPC_CONFIG_ENV"         //环境
-	NAMESPACE  = "GO_GRPC_CONFIG_NAMESPACE"   //命名空间
-	PROJECT    = "GO_GRPC_CONFIG_PROJECT"     //项目
-	VERSION    = "GO_GRPC_CONFIG_VERSION"     //版本
-	syncPeriod = 30
+	FN            = "application" //生成配置文件的名称
+	Ext           = "json"        //生成配置文件的后缀
+	path          = "HOME"        //生成配置文件的根目录
+	pathDir       = "go-grpc-config"
+	ServerHost    = "GO_GRPC_CONFIG_SERVER_HOST" //服务端地址
+	ENV           = "GO_GRPC_CONFIG_ENV"         //环境
+	NAMESPACE     = "GO_GRPC_CONFIG_NAMESPACE"   //命名空间
+	PROJECT       = "GO_GRPC_CONFIG_PROJECT"     //项目
+	VERSION       = "GO_GRPC_CONFIG_VERSION"     //版本
+	syncPeriod    = 30
+	showChangeLog = "GO_GRPC_CONFIG_SHOW_CHANGE_LOG" //是否显示文件修改提示
 )
 
 var (
@@ -79,6 +80,7 @@ func createInfo() (*info, error) {
 	inf.namespace = os.Getenv(NAMESPACE)
 	inf.project = os.Getenv(PROJECT)
 	inf.version = os.Getenv(VERSION)
+	inf.ShowChangeLog = os.Getenv(showChangeLog)
 	if os.Getenv(ServerHost) == "" {
 		return nil, errors.New("server host cannot be empty")
 	}
@@ -96,13 +98,14 @@ func createInfo() (*info, error) {
 }
 
 type info struct {
-	env        string
-	namespace  string
-	project    string
-	version    string
-	Path       string
-	ServerHost string
-	client     grpcconfig.Client
+	env           string
+	namespace     string
+	project       string
+	version       string
+	Path          string
+	ServerHost    string
+	ShowChangeLog string
+	client        grpcconfig.Client
 }
 
 func (inf *info) sync() error {
