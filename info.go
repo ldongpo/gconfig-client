@@ -119,11 +119,11 @@ func (inf *info) sync() error {
 	var err error
 	inf.client, err = grpcconfig.NewClient("grcpConfig", rpcTimeout, connTimeout, protocol, host)
 	if err != nil {
-		return fmt.Errorf("config response  message: %s\n", err.Error())
+		return fmt.Errorf("rpc err: %s\n", err.Error())
 	}
 	res, err := inf.client.Get(context.Background(), &req)
 	if err != nil {
-		return fmt.Errorf("config response  message: %s\n", err.Error())
+		return fmt.Errorf("connect err: %s\n", err.Error())
 	}
 	//log.Printf("config response: %v\n", res.Data)
 	d := res.Data
