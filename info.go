@@ -89,11 +89,7 @@ func createInfo() (*info, error) {
 	if err != nil {
 		return inf, err
 	}
-	rpcTimeout := client.WithRPCTimeout(5 * time.Second)
-	connTimeout := client.WithConnectTimeout(500 * time.Millisecond)
-	transport := client.WithTransportProtocol(transport.GRPC)
-	host := client.WithHostPorts(os.Getenv(ServerHost))
-	inf.client, err = grpcconfig.NewClient("grcpConfig", rpcTimeout, connTimeout, transport, host)
+
 	return inf, err
 }
 
@@ -115,6 +111,15 @@ func (inf *info) sync() error {
 		Namespace: inf.namespace,
 		Project:   inf.project,
 		Version:   inf.version,
+	}
+	rpcTimeout := client.WithRPCTimeout(5 * time.Second)
+	connTimeout := client.WithConnectTimeout(500 * time.Millisecond)
+	protocol := client.WithTransportProtocol(transport.GRPC)
+	host := client.WithHostPorts(os.Getenv(ServerHost))
+	var err error
+	inf.client, err = grpcconfig.NewClient("grcpConfig", rpcTimeout, connTimeout, protocol, host)
+	if err != nil {
+		return fmt.Errorf("config response  message: %s\n", err.Error())
 	}
 	res, err := inf.client.Get(context.Background(), &req)
 	if err != nil {
