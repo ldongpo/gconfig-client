@@ -125,7 +125,6 @@ func (inf *info) sync() error {
 	if err != nil {
 		return fmt.Errorf("connect err: %s\n", err.Error())
 	}
-	//log.Printf("config response: %v\n", res.Data)
 	d := res.Data
 	if d == "" {
 		return nil
